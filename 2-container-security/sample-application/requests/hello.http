@@ -1,0 +1,13 @@
+### GET request to example api endpoint
+GET http://localhost:8080/api/hello
+
+### GET request to health endpoint
+GET http://localhost:8080/actuator/health
+
+### GET request to readiness endpoint
+GET http://localhost:8080/actuator/health/readiness
+
+### GET request to liveness endpoint
+GET http://localhost:8080/actuator/health/liveness
+
+###

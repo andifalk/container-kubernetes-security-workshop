@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: sample-application
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
