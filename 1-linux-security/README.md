@@ -5,8 +5,7 @@
 * Linux VM or container host (Ubuntu recommended)
 * Basic knowledge of the Linux commandline
 * Basic commands like `ps`, `(h)top`, `ls`, `chmod`, `chown` and `chroot`
-* The ping command, in Ubuntu/Debian just install it using `sudo apt install iputils-ping`
-* Tools for getting and setting Linux capabilities, in Ubuntu/Debian just install it using `sudo apt install libcap2-bin`
+* Further prerequisites are listed in the individual labs
 
 ## Table of Contents
 
@@ -165,10 +164,9 @@ image security scanners report on the presence of files with the _setuid_ bit se
 
 Back in the old days the only way in Linux has been to either execute a process in privileged (_root_) or unprivileged mode (all other users).
  
-With linux capabilities you can now break down privileges used by executing processes/threads to just grant the least
-privileges required to successfully run a thread.
+With linux capabilities you can now break down privileges used by executing processes/threads to just grant the least possible privileges required to successfully run a thread.
 
-Just look up the detailed docs for linux capabilities by
+Look up the detailed docs for linux capabilities by
 
 ```shell
 man capabilities
@@ -220,12 +218,27 @@ You will see in the container security part how docker uses capabilities to run 
 
 ## Linux Namespaces
 
-### Introduction: Understand Linux namespaces
+### 🎯 Objective
+
+Learn how Linux namespaces isolate system resources by creating isolated environments using the unshare and nsenter tools.
+
+### 🧰 Prerequisites
+- Linux system (Ubuntu/Debian/CentOS)
+- Tools: `util-linux` (`unshare`, `nsenter`), `procps`, `iproute2`, `coreutils`
+- Root or `sudo` access recommended
+
+### Install required tools:
+
+```bash
+sudo apt update
+sudo apt install util-linux procps iproute2 -y
+```
+
+---
 
 Linux namespaces control what a process can see. CGroups (see next section [Linux CGroups](#linux-cgroups)) control the resources that a process can use;
 
 Linux currently provides the following namespaces:
-
 * Unix Timesharing System (UTS): This namespace is responsible for the hostname and domain names.
 * Process IDs
 * Mount points
@@ -234,13 +247,15 @@ Linux currently provides the following namespaces:
 * Inter-process communications (IPC)
 * Control groups (cgroups)
 
-You can easily see all namespaces on your machine using the _lsns_ command.
-Try also to run this command using root, then you will see more details.
+You can see all namespaces on your machine using the `lsns` command.
+Try also to run this command using root, then you are able to see more details.
 
 By using the tool _unshare_ you may run a process with some namespaces unshared from the parent 
 (i.e., simulating a linux container).
 
-### Lab: Isolating the hostname using a UTS namespace
+---
+
+### 🔹 Lab 1: Isolating the hostname using a UTS namespace
 
 So let's try to use the UTS namespace to isolate the hostname:
 
@@ -258,7 +273,11 @@ Now open a new terminal and check the hostname. You will notice that the host st
 hostname
 ``` 
 
-### Lab: Isolating the process id using a PID namespace
+✅ Hostname change is isolated.
+
+---
+
+### Lab 2: Isolating the process id using a PID namespace
 
 You can also use the _PID_ namespace to isolate the process id.
 
@@ -269,7 +288,11 @@ ps aux
 
 Only a few processes show now, starting from PID 1. This simulates what a container would see: a trimmed-down process view.
 
-### Lab: Isolating the network using a network namespace
+✅ Simulates container-like PID isolation.
+
+---
+
+### 🔹 Lab 3: Isolating the network using a network namespace
 
 ```shell
 sudo unshare -n bash
@@ -278,7 +301,11 @@ ip a
 
 This should show only the `lo` interface (loopback). Network is isolated. You can’t reach the outside world.
 
-### Lab: Check Namespace Files in /proc
+✅ Network isolation achieved.
+
+---
+
+### 🔹 Lab 4: Inspect Namespace Links in `/proc`
 
 ```shell
 echo $$
@@ -287,7 +314,11 @@ ls -l /proc/$$/ns/
 
 You’ll see symbolic links to namespace descriptors like mnt, uts, pid, etc.
 
-### Lab: Isolating the mount namespace
+✅ Observe `mnt`, `uts`, `pid`, `net`, and other namespace descriptors.
+
+---
+
+### 🔹 Lab 5: Isolating the mount namespace
 
 ```shell
 sudo unshare --mount bash
@@ -304,7 +335,11 @@ mount | grep mylab
 
 Our new mount doesn’t appear outside the namespace.
 
-### Lab: Combine multiple Namespaces
+✅ Mount is isolated from the host view.
+
+---
+
+### 🔹 Lab 6: Combine multiple Namespaces
 
 ```shell
 sudo unshare -u -n -m -p -i -f --mount-proc bash
@@ -322,7 +357,11 @@ mount
 All outputs reflect isolation from the host.
 You will see that the hostname is isolated, the process id starts at 1, the network is isolated and the mount namespace is also isolated.
 
-### Lab: Enter Another Process’s Namespace
+✅ Fully isolated namespace context.
+
+---
+
+### 🔹 Lab 7: Enter Another Process’s Namespace
 
 Another option is the _nsenter_ tool that basically is intended
 to run a program with namespaces of other processes.
@@ -340,15 +379,20 @@ sudo nsenter -t $pid -u hostname
 
 Now you’ve entered another process’s UTS namespace.
 
-### Wrap-Up
+✅ Join and inspect the other process's namespace.
+
+---
+
+### ✅ Wrap-Up
 
 * Namespaces are the foundation of container isolation.
-* They’re composable: you can isolate specific aspects (network, PID, mount, etc.).
-* Tools used by containers like Docker and Kubernetes leverage these primitives.
+* Learned to use `unshare` and `nsenter` for namespace exploration
+* Explored UTS, PID, MNT, NET, and combined namespaces
+* Simulated container isolation mechanisms using native Linux features
+
+---
 
 ## Learning Linux cgroups
-
-Docker uses the Linux _cgroups_ (one of the linux namespaces) to limit resource usage of containers.
 
 ### 🎯 Objective
 Understand how Linux cgroups isolate and limit process resources. These labs use native Linux tools (no Docker) to demonstrate:
@@ -368,7 +412,7 @@ sudo apt update
 sudo apt install cgroup-tools stress
 ```
 
-Check cgroups version:
+Check the `cgroups` version:
 ```bash
 mount | grep cgroup
 ```
@@ -393,7 +437,7 @@ echo 100000 | sudo tee /sys/fs/cgroup/cpu/mycg/cpu.cfs_period_us
 sudo cgexec -g cpu:mycg stress --cpu 1 --timeout 20
 ```
 
-#### 1.4 Monitor with `top`
+#### 1.4 Monitor with `top` or `htop`
 
 ✅ Expected: CPU usage is throttled.
 
@@ -406,7 +450,7 @@ sudo cgexec -g cpu:mycg stress --cpu 1 --timeout 20
 sudo cgcreate -g memory:/memcg
 ```
 
-#### 2.2 Set memory limit to 100 MB
+#### 2.2 Set the memory limit to 100 MB
 ```bash
 echo $((100 * 1024 * 1024)) | sudo tee /sys/fs/cgroup/memory/memcg/memory.limit_in_bytes
 ```
@@ -906,6 +950,6 @@ sudo ausearch -m APPARMOR
 
 ---
 
-## Next
+## Next Up
 
-[Next: Application Security](../step1-hello-spring-boot)
+[Next: Container Security](../2-container-security)
