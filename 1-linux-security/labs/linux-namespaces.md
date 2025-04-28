@@ -59,7 +59,7 @@ hostname
 
 ---
 
-## Lab 2: Isolating the process id using a PID namespace
+## 🔹 Lab 2: Isolating the process id using a PID namespace
 
 You can also use the _PID_ namespace to isolate the process id.
 

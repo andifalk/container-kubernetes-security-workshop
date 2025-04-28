@@ -34,11 +34,24 @@
 
 ## Kubernetes Security
 
-* [Kubernetes Security Labs](3-kubernetes-security/README.md)
+* [Basic Kubernetes Security Labs](3-kubernetes-security/labs/basic_secure_kubernetes_containers.md)
+* [Kubernetes RBAC Labs](3-kubernetes-security/labs/kubernetes_rbac.md)
+* [Kubernetes Pod Security Context Labs](3-kubernetes-security/labs/pod_security_context.md)
+* [Kubernetes Pod Security Admission Labs](3-kubernetes-security/labs/pod_security_admission.md)
+* [Kubernetes Network Policies Labs](3-kubernetes-security/labs/network_policies.md)
+* [Kubernetes Static Security Testing Labs](3-kubernetes-security/labs/kubernetes_static_security_testing.md)
+
+---
+
+* [Kubernetes Container Escaping Labs](3-kubernetes-security/labs/kubernetes_container_escape.md) 
+* [Kubernetes Runtime Security with Falco Labs](3-kubernetes-security/labs/runtime_security_with_falco.md)
 
 ## Secrets Management
 
-* [Secrets Management Labs](4-secrets/README.md)
+* [Kubernetes Secrets Basics Labs](4-secrets/labs/kubernetes_secrets_basics.md)
+* [Kubernetes Secrets Are Not Encrypted Labs](4-secrets/labs/kubernetes_secrets_not_encrypted.md)
+* [Kubernetes Secrets Encrypted At Rest Labs](4-secrets/labs/encryption_at_rest_for_kubernetes_secrets.md)
+* [Kubernetes Secrets with HashiCorp Vault Labs](4-secrets/labs/kubernetes_secrets_with_vault.md)
 
 ## Further Resources
 
