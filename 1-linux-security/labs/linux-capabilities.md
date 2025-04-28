@@ -94,10 +94,32 @@ sudo setcap cap_net_raw+ep ./showuid
 man 7 capabilities
 ```
 
+| Capability           | Description                                                                                          |
+|----------------------|------------------------------------------------------------------------------------------------------|
+| CAP_CHOWN            | Make arbitrary changes to file UIDs and GIDs                                                         |
+| CAP_NET_ADMIN        | Perform network operations like modify routing tables                                                |
+| CAP_NET_BIND_SERVICE | Bind a socket to Internet domain privileged ports (port numbers less than 1024)                      |
+| CAP_NET_RAW          | use RAW and PACKET sockets                                                                           |
+| CAP_SETUID           | Make arbitrary manipulations of process UIDs                                                         |
+| CAP_SYS_ADMIN        | Perform system admin operations like _mount_, _swapon_, _sethostname_ or perform privileged _syslog_ |
+| CAP_SYS_BOOT         | Use reboot                                                                                           |
+| CAP_SYS_CHROOT       | Use chroot                                                                                           |
+| CAP_SYS_TIME         | Set system clock                                                                                     |
+| CAP_SYSLOG           | Perform privileged syslog operations                                                                 |
+
 🧠 Useful capabilities:
 - `CAP_NET_RAW`
 - `CAP_NET_BIND_SERVICE`
 - `CAP_SYS_ADMIN` (powerful, use cautiously)
+
+If you want to query capabilities for a process, use this command
+
+```shell
+getpcaps <pid>
+```
+
+You should use this for root processes. Processes for non-root users usually do not have
+any capability set.
 
 ---
 

@@ -4,6 +4,14 @@
 * [Linux Namespaces Labs](labs/linux-namespaces.md)
 * [Linux Capabilities Labs](labs/linux-capabilities.md)
 * [Linux Control Groups (cgroups) Labs](labs/linux-cgroups.md)
+
+---
+
 * [Linux Seccomp Labs](labs/seccomp.md)
 * [Linux AppArmor Labs](labs/apparmor.md)
 * [Linux SELinux Labs](labs/selinux.md)
+
+---
+
+* [Linux System Logging Labs](labs/linux-system-logging.md)
+* [Linux System Monitoring Labs](labs/linux-system-monitoring.md)

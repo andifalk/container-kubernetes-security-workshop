@@ -1,6 +1,17 @@
-# Linux File permissions
+# 🧪 Linux File permissions
 
-## Introduction: Understand Linux file permissions
+## 🎯 Objective
+Learn to manage Linux file permissions, understand setuid/setgid, and recognize associated security risks.
+
+---
+
+## 🧰 Prerequisites
+
+- Linux system (Ubuntu/Debian/CentOS)
+- `sudo` access
+- Basic shell familiarity
+
+---
 
 In Linux, everything is a file, like:
 
@@ -10,8 +21,7 @@ In Linux, everything is a file, like:
 * Logs
 * Devices
 
-Permissions on such files determine which users are allowed to access those files and what actions they
-can perform on the files.
+Permissions on such files determine which users are allowed to access those files and what actions they can perform on the files.
 
 Each file and directory has three user-based permission groups:
 
@@ -44,6 +54,24 @@ The file owner and group can be changed using the `chown` command. By performing
 The file permissions are edited by using the command `chmod`. You can assign the permissions explicitly or by using a binary reference.
 You may add the _read_ and _write_ permission to the group using `chmod g+rw text.txt`. To remove the same permissions for all other users you would type `chmod o-rw text.txt`.
 
+---
+
+## 🔹 Lab 1: Basic File Permissions
+
+### Step 1: Create a file and set permissions
+
+```bash
+touch myfile.txt
+chmod o+rw myfile.txt
+ls -l myfile.txt
+```
+
+✅ **Expected:** Only the owner can read/write.
+
+---
+
+## 🔹 Lab 2: Understanding Numeric Permissions
+
 You may also specify the complete file permissions using a binary reference instead:
 The numbers are a binary representation of the rwx string.
 
@@ -53,7 +81,33 @@ The numbers are a binary representation of the rwx string.
 
 So you could also perform `chmod 644 test.txt` instead.
 
-## Lab 1: Using special permissions using setuid and setgid
+Set different permissions:
+
+```bash
+chmod 755 myfile.txt
+ls -l myfile.txt
+```
+
+✅ **Expected:** Owner can read/write/execute; the group and others can read/execute.
+
+---
+
+## 🔹 Lab 3: Using `umask` to Set Default Permissions
+
+Check and change `umask`:
+
+```bash
+umask
+umask 027
+touch newfile.txt
+ls -l newfile.txt
+```
+
+✅ New files will have permissions limited by `umask`.
+
+---
+
+## 🔹 Lab 4: Using special permissions using setuid and setgid
 
 When executing a file, usually the process that gets started inherits your user ID.
 If the file has the setuid/setgid bit set, the process will have the user/group ID of the file’s owner/group instead.
@@ -138,3 +192,57 @@ This bit is typically used to give a program privilege that it needs but is not
 usually extended to regular users.
 Because _setuid_ provides a dangerous pathway to privilege escalation, some container
 image security scanners report on the presence of files with the _setuid_ bit set.
+
+---
+
+## 🔹 Lab 5: Setgid and Directory Behavior
+
+Create a directory and setgid:
+
+```bash
+mkdir setgid-dir
+chmod 2775 setgid-dir
+ls -ld setgid-dir
+```
+
+✅ `s` appears on group permissions.
+
+Files created inside inherit the directory's group:
+
+```bash
+cd setgid-dir
+touch file1.txt
+ls -l
+```
+
+✅ Group ownership is inherited automatically.
+
+---
+
+### 🚨 Attack Potential:
+
+- If writable by multiple users, can lead to group privilege escalation or unauthorized access.
+
+---
+
+## 🔹 Lab 6: Finding All Setuid and Setgid Binaries
+
+Audit the system:
+
+```bash
+find / -perm -4000 -type f 2>/dev/null  # Setuid
+find / -perm -2000 -type f 2>/dev/null  # Setgid
+```
+
+✅ Review carefully — attackers often target vulnerable setuid/setgid binaries.
+
+---
+
+## ✅ Wrap-Up
+
+- ✅ Learned about Linux file permissions
+- ✅ Created and used setuid/setgid binaries
+- ✅ Understood real attack potential
+- ✅ Practiced mitigation and auditing techniques
+
+---
