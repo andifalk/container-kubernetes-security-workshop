@@ -6,8 +6,8 @@
   * [Linux File Permissions Labs](1-linux-security/labs/linux-file-permissions.md)
   * [Linux Namespaces Labs](1-linux-security/labs/linux-namespaces.md)
   * [Linux Capabilities Labs](1-linux-security/labs/linux-capabilities.md)
-  * [Linux Control Groups (cgroups) Labs](1-linux-security/labs/linux-cgroups.md)
 * Advanced
+  * [Linux Control Groups (cgroups) Labs](1-linux-security/labs/linux-cgroups.md)
   * [Linux Seccomp Labs](1-linux-security/labs/seccomp.md)
   * [Linux AppArmor Labs](1-linux-security/labs/apparmor.md)
   * [Linux SELinux Labs](1-linux-security/labs/selinux.md)
@@ -47,6 +47,7 @@
 * Advanced
   * [Kubernetes Secrets Are Not Encrypted Labs](4-secrets/labs/kubernetes_secrets_not_encrypted.md)
   * [Kubernetes Secrets Encrypted At Rest Labs](4-secrets/labs/encryption_at_rest_for_kubernetes_secrets.md)
+* External Secrets Management
   * [Kubernetes Secrets with HashiCorp Vault Labs](4-secrets/labs/kubernetes_secrets_with_vault.md)
 
 ## Further Resources
