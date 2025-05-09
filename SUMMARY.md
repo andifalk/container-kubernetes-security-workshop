@@ -2,35 +2,27 @@
 
 ## Linux Security Basics for Containers
 
-### Basics
-
-* [Linux File Permissions Labs](1-linux-security/labs/linux-file-permissions.md)
-* [Linux Namespaces Labs](1-linux-security/labs/linux-namespaces.md)
-* [Linux Capabilities Labs](1-linux-security/labs/linux-capabilities.md)
-* [Linux Control Groups (cgroups) Labs](1-linux-security/labs/linux-cgroups.md)
-
-### Advanced
-
-* [Linux Seccomp Labs](1-linux-security/labs/seccomp.md)
-* [Linux AppArmor Labs](1-linux-security/labs/apparmor.md)
-* [Linux SELinux Labs](1-linux-security/labs/selinux.md)
-
-### Logging and Monitoring
-
-* [Linux System Logging Labs](1-linux-security/labs/linux-system-logging.md)
-* [Linux System Monitoring Labs](1-linux-security/labs/linux-system-monitoring.md)
+* Basics
+  * [Linux File Permissions Labs](1-linux-security/labs/linux-file-permissions.md)
+  * [Linux Namespaces Labs](1-linux-security/labs/linux-namespaces.md)
+  * [Linux Capabilities Labs](1-linux-security/labs/linux-capabilities.md)
+  * [Linux Control Groups (cgroups) Labs](1-linux-security/labs/linux-cgroups.md)
+* Advanced
+  * [Linux Seccomp Labs](1-linux-security/labs/seccomp.md)
+  * [Linux AppArmor Labs](1-linux-security/labs/apparmor.md)
+  * [Linux SELinux Labs](1-linux-security/labs/selinux.md)
+* Logging and Monitoring
+  * [Linux System Logging Labs](1-linux-security/labs/linux-system-logging.md)
+  * [Linux System Monitoring Labs](1-linux-security/labs/linux-system-monitoring.md)
 
 ## Container Security
 
-### Basics
-
-* [Basic Container Security Labs](2-container-security/labs/basic-secure-container-usage.md)
-
-### Advanced
-
-* [Docker Linux Capabilities Labs](2-container-security/labs/docker_linux_capabilities.md)
-* [Container Image Scanning Labs](2-container-security/labs/container_image_scanning.md)
-* [Docker Static Security Testing Labs](2-container-security/labs/docker_static_security_testing.md)
+* Basics
+  * [Basic Container Security Labs](2-container-security/labs/basic-secure-container-usage.md)
+* Advanced
+  * [Docker Linux Capabilities Labs](2-container-security/labs/docker_linux_capabilities.md)
+  * [Container Image Scanning Labs](2-container-security/labs/container_image_scanning.md)
+  * [Docker Static Security Testing Labs](2-container-security/labs/docker_static_security_testing.md)
  
 ### Hacking
 
