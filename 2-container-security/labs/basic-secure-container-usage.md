@@ -1,6 +1,7 @@
-# 🧪 Lab Series: Secure Use of Docker Containers
+# 🧪 Secure Use of Docker Containers
 
 ## 🎯 Objective
+
 Learn how to use Docker containers securely by applying best practices and reducing attack surfaces.
 
 ---
@@ -24,6 +25,11 @@ docker images | grep -E 'ubuntu|alpine'
 ```
 
 ✅ **Expected:** Alpine is much smaller.
+
+```bash
+ubuntu       latest    a0e45e2ce6e6   12 days ago    78.1MB
+alpine       latest    aded1e1a5b37   2 months ago   7.83MB
+```
 
 🧠 Smaller images = fewer vulnerabilities and faster deploys.
 
@@ -54,7 +60,7 @@ docker run --rm -it insecureuser-container
 
 ## 🔹 Lab 3: Run Containers as Non-Root User
 
-### Step 1: Create a Dockerfile
+### Step 1: Create a more secure Dockerfile
 
 ```Dockerfile
 # Dockerfile
@@ -64,7 +70,7 @@ USER secureuser
 CMD ["sh"]
 ```
 
-### Step 2: Build and run
+### Step 2: Build and run again
 
 ```bash
 docker build -t secureuser-container .
@@ -95,11 +101,23 @@ docker run --rm -it --cap-drop=ALL alpine sh
 
 ### Step 1: Run with Docker’s default seccomp profile
 
+Docker now runs by default using a default seccomp profile. By default this profile allows executing the potentially dangerous `strace` command.
+
+First, get the default seccomp profile from github:
+
+```bash
+curl -O https://raw.githubusercontent.com/moby/moby/master/profiles/seccomp/default.json
+```
+
+Open the file with `nano default.json` and search for the entry `ptrace` (using Ctrl-W) and delete the corresponding line and exit nano using `Ctrl-X` and type `Y` to store the file.
+
+Now run the following docker container using the modified seccomp profile:
+
 ```bash
 docker run --rm -it --security-opt seccomp=default.json alpine sh
 ```
 
-Try:
+Inside the container try:
 
 ```bash
 apk add strace
@@ -107,6 +125,15 @@ strace -c ls
 ```
 
 🧠 Seccomp blocks risky syscalls.
+
+```bash
+strace: test_ptrace_get_syscall_info: PTRACE_TRACEME: Operation not permitted
+strace: ptrace(PTRACE_TRACEME, ...): Operation not permitted
+strace: PTRACE_SETOPTIONS: Operation not permitted
+strace: cleanup: waitpid(-1, __WALL): No child process
+```
+
+See more details at https://docs.docker.com/engine/security/seccomp
 
 ---
 
@@ -120,11 +147,17 @@ sudo aa-status
 
 ### Step 2: Run with a profile
 
+When you run a container, it uses the `docker-default` AppArmor policy unless you override it with the security-opt option.
+
+You can also specify the profile explicitly:
+
 ```bash
-docker run --rm -it --security-opt apparmor=unconfined alpine sh
+docker run --rm -it --security-opt apparmor=docker-default alpine sh
 ```
 
 🧠 Use `docker-default` or custom profiles for app restrictions.
+
+See more details at https://docs.docker.com/engine/security/apparmor
 
 ---
 
@@ -147,6 +180,10 @@ docker run --rm -it -v $(pwd)/db_password.txt:/run/secrets/db_pass alpine sh
 
 ✅ **Expected:** Secret is not in the image, only on runtime mount.
 
+Check for secret in the container located at `/run/secrets/db_pass`.
+
+Docker provides native secrets support only in swarm mode. See more details at https://docs.docker.com/engine/swarm/secrets. We will look more in depth into secrets in the correspondig section. 
+
 ---
 
 ## 🔹 Lab 8: Scan Images for Vulnerabilities
@@ -159,11 +196,18 @@ Install Trivy:
 brew install aquasecurity/trivy/trivy
 ```
 
-Scan:
+### Step 2: Scan the Alpine image
 
 ```bash
 trivy image alpine
 ```
+
+### Step 3: Scan the Ubuntu image
+
+```bash
+trivy image ubuntu
+```
+
 
 ✅ **Expected:** CVE results and recommendations.
 

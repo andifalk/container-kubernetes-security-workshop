@@ -1,6 +1,7 @@
 # 🧪 Understanding Linux Capabilities with Docker
 
 ## 🎯 Objective
+
 Learn what Linux capabilities are, how containers use them, and how to manage them securely using Docker’s `--cap-add` and `--cap-drop` options.
 
 ---

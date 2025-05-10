@@ -1,6 +1,7 @@
-# 🧪 Lab Series: Static Security Testing for Dockerfiles
+# 🧪 Static Security Testing for Dockerfiles
 
 ## 🎯 Objective
+
 Learn to perform static analysis on Dockerfiles to identify security issues before building images.
 
 ---
@@ -34,8 +35,6 @@ Save it as `Dockerfile`.
 
 ## 🔹 Lab 2: Install `hadolint` (Dockerfile Linter)
 
-### On Ubuntu:
-
 ```bash
 sudo apt install hadolint
 ```
@@ -68,7 +67,7 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock goodwithtech/dockle
 
 Checkov is a static code analysis tool for infrastructure security including Dockerfiles.
 
-### Install Checkov:
+### Install Checkov
 
 ```bash
 pip install checkov

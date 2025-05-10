@@ -1,9 +1,10 @@
-# 🧪 Lab Series: Container Escape with Docker (Educational Use Only)
+# 🧪 Container Escape with Docker (Educational Use Only)
 
 > ⚠️ WARNING: These labs are for educational and defensive purposes only.  
 > Run them **only in isolated, non-production environments** like VMs or lab systems.
 
 ## 🎯 Objective
+
 Learn how insecure Docker configurations can lead to container escapes and host compromise — and how to prevent them.
 
 ---

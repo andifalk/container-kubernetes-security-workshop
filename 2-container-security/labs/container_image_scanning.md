@@ -1,6 +1,7 @@
-# 🧪 Lab Series: Scanning Container Images Using Trivy
+# 🧪 Scanning Container Images Using Trivy
 
 ## 🎯 Objective
+
 Use Aqua Security's Trivy to scan container images for vulnerabilities, misconfigurations, and exposed secrets.
 
 ---
@@ -15,14 +16,8 @@ Use Aqua Security's Trivy to scan container images for vulnerabilities, misconfi
 
 ## 🔹 Lab 1: Install Trivy
 
-### On Ubuntu:
-
 ```bash
-sudo apt install wget apt-transport-https gnupg lsb-release -y
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
-echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb stable main" | sudo tee /etc/apt/sources.list.d/trivy.list
-sudo apt update
-sudo apt install trivy
+brew install aquasecurity/trivy/trivy
 ```
 
 ---
@@ -39,7 +34,9 @@ trivy image nginx:latest
 
 ## 🔹 Lab 3: Scan a Local Image
 
-### Build your own image:
+### Step 1: Build your own image
+
+Create the `Dockerfile`:
 
 ```Dockerfile
 # Dockerfile
@@ -47,8 +44,15 @@ FROM ubuntu:latest
 RUN apt update && apt install -y curl
 ```
 
+Build the container image:
+
 ```bash
 docker build -t my-insecure-image .
+```
+
+### Step 2: Scan the local image
+
+```bash
 trivy image my-insecure-image
 ```
 
@@ -59,7 +63,7 @@ trivy image my-insecure-image
 ## 🔹 Lab 4: Scan for Secrets and Misconfigurations
 
 ```bash
-trivy image --scanners vuln,config,secret my-insecure-image
+trivy image --scanners vuln,misconfig,secret my-insecure-image
 ```
 
 ✅ Trivy also finds secrets and insecure configs in layers.
@@ -68,19 +72,19 @@ trivy image --scanners vuln,config,secret my-insecure-image
 
 ## 🔹 Lab 5: Generate Reports in Different Formats
 
-### JSON output:
+### Step 1: Use JSON output
 
 ```bash
 trivy image -f json -o trivy-report.json my-insecure-image
 ```
 
-### HTML output (requires Trivy >= 0.50):
+### Step 2: Use CycloneDx output (for SBOM)
 
 ```bash
-trivy image -f template --template "@/contrib/html.tpl" -o trivy-report.html my-insecure-image
+trivy image --scanners vuln -f cyclonedx -o trivy-sbom.json my-insecure-image
 ```
 
-✅ Useful for automation and CI pipelines.
+✅ Useful for automation in CI pipelines and to report SBOM files as part of supply chain security.
 
 ---
 
