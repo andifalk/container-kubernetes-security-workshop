@@ -1,4 +1,4 @@
-# Container and Kubernetes Security Workshop
+# Linux, Container and Kubernetes Security Workshop
 
 ## 🐧 Linux Security Basics for Containers
 
