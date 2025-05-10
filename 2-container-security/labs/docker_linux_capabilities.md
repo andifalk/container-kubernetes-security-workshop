@@ -21,20 +21,43 @@ sudo apt install libcap2-bin iputils-ping
 
 ## 🔹 Lab 1: View Capabilities Inside a Docker Container
 
-### Step 1: Start a default container
+### Step 1: Create and Start a custom container
 
-```bash
-docker run --rm -it debian bash
+Create this `Dockerfile` using vim or nano editors:
+
+```Dockerfile
+FROM ubuntu:latest
+RUN apt update && apt install -y iputils-ping libcap2-bin
+CMD ["bash"]
 ```
 
-### Step 2: Install tools and check capabilities
+Build the docker container using:
 
 ```bash
-apt update && apt install -y libcap2-bin
+docker build -t cap-container .
+```
+
+```bash
+docker run --rm -it cap-container
+```
+
+### Step 2: Check capabilities
+
+```bash
 capsh --print
 ```
 
 ✅ **Expected:** Default set of capabilities shown (`cap_net_raw`, `cap_chown`, etc.)
+
+#### Excursive: 🧠 Capsh Section Breakdown
+
+![capsh_breakdown](image/capsh_section_breakdown.png "Capsh Breakdown")
+
+You may also use the more easier approach to see the effective capabilities using this command:
+
+```bash
+getpcaps $$
+```
 
 ---
 
@@ -43,13 +66,18 @@ capsh --print
 ### Step 1: Run a container with no capabilities
 
 ```bash
-docker run --rm -it --cap-drop=ALL debian bash
+docker run --rm -it --cap-drop=ALL cap-container
 ```
 
-### Step 2: Try actions that need privileges
+### Step 2: Check no capabilities are set
 
 ```bash
-apt update && apt install -y iputils-ping
+capsh --print
+```
+
+### Step 3: Try actions that need privileges
+
+```bash
 ping -c 1 8.8.8.8
 ```
 
@@ -62,13 +90,18 @@ ping -c 1 8.8.8.8
 ### Step 1: Add back `CAP_NET_RAW`
 
 ```bash
-docker run --rm -it --cap-drop=ALL --cap-add=NET_RAW debian bash
+docker run --rm -it --cap-drop=ALL --cap-add=NET_RAW cap-container
 ```
 
-### Step 2: Try `ping` again
+### Step 2: Check NET_RAW capability is set
 
 ```bash
-apt update && apt install -y iputils-ping
+capsh --print
+```
+
+### Step 3: Try `ping` again
+
+```bash
 ping -c 1 8.8.8.8
 ```
 
@@ -81,32 +114,35 @@ ping -c 1 8.8.8.8
 ### Step 1: Run a privileged container
 
 ```bash
-docker run --rm -it --privileged debian bash
+docker run --rm -it --privileged cap-container
 ```
 
 ```bash
-capsh --print
+capsh --print | grep cap_sys_admin
 ```
 
-✅ **Expected:** All capabilities are available. The container can do nearly anything the host can.
+✅ **Expected:** All SYS_ADMIN capability is available. The container can do nearly anything the host can.
 
----
-
-## 🔹 Lab 5: Test Filesystem Capabilities
-
-### Step 1: Try mounting inside a container
+### Step 2: Try mounting inside a container
 
 ```bash
-docker run --rm -it --cap-add=SYS_ADMIN debian bash
 mkdir /mnt/test
-mount -t tmpfs none /mnt/test
+mount -t tmpfs tmpfs /mnt/test
 ```
 
 ✅ **Expected:** Works with `CAP_SYS_ADMIN`; fails without it.
 
+### Step 3: Check access to all (host) devices
+
+```bash
+ls -l /dev
+```
+
+✅ **Expected:** Privileged containers have access to almost all host devices (/dev/kvm, /dev/sda, etc.), unlike default containers.
+
 ---
 
-## 🔹 Lab 6: Inspect Running Containers
+## 🔹 Lab 5: Inspect Running Containers
 
 ### Step 1: Run a container in the background
 
@@ -117,7 +153,7 @@ docker run -d --cap-drop=ALL --name minimal alpine sleep 300
 ### Step 2: Inspect the container
 
 ```bash
-docker inspect minimal | grep Cap
+docker inspect minimal | grep Cap -A 2
 ```
 
 ✅ **Expected:** `CapDrop` should list all dropped caps, `CapAdd` should be empty.

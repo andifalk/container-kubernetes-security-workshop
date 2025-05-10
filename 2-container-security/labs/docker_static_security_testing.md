@@ -33,33 +33,82 @@ Save it as `Dockerfile`.
 
 ---
 
-## 🔹 Lab 2: Install `hadolint` (Dockerfile Linter)
+## 🔹 Lab 2: Check with `hadolint` (Dockerfile Linter)
+
+### Step 1: Install hadolint
+
+Just install using `brew`:
 
 ```bash
-sudo apt install hadolint
+brew install hadolint
 ```
 
-### Or via Docker:
+or download the binary:
 
 ```bash
-docker run --rm -i hadolint/hadolint < Dockerfile
+wget -O /usr/local/bin/hadolint https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64
+chmod +x /usr/local/bin/hadolint
+```
+
+### Step 2: Check using hadolint
+
+```bash
+hadolint ./Dockerfile
 ```
 
 ✅ Detects issues like use of `latest`, insecure permissions, and `ADD` instead of `COPY`.
 
+```bash
+Dockerfile:1 DL3007 warning: Using latest is prone to errors if the image will ever update. Pin the version explicitly to a release tag
+Dockerfile:3 DL3027 warning: Do not use apt as it is meant to be a end-user tool, use apt-get or apt-cache instead
+Dockerfile:5 DL3020 error: Use COPY instead of ADD for files and folders
+```
+
 ---
 
-## 🔹 Lab 3: Install and Use `dockle`
+## 🔹 Lab 3: Check Image with `dockle`
 
 Dockle checks container image best practices and Dockerfile structure.
 
-```bash
-docker pull goodwithtech/dockle
+### Step 1: Install dockle
 
-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock goodwithtech/dockle docker.io/library/ubuntu
+```bash
+brew install goodwithtech/r/dockle
+```
+
+### Step 2: Check with dockle
+
+Build the container image using the Dockerfile from previous lab:
+
+```bash
+echo 'secret' > secret.txt
+docker build -t check-container .
+```
+
+Now check the container image using dockle:
+
+```bash
+dockle check-container
 ```
 
 ✅ Report will include missing `HEALTHCHECK`, `USER`, writable files, etc.
+
+```bash
+FATAL - CIS-DI-0009: Use COPY instead of ADD in Dockerfile
+ * Use COPY : ADD secret.txt /root/secret.txt # buildkit
+FATAL - DKL-DI-0001: Avoid sudo command
+ * Avoid sudo in container : RUN /bin/sh -c apt update && apt install -y curl sudo # buildkit
+FATAL - DKL-DI-0005: Clear apt-get caches
+ * Use 'rm -rf /var/lib/apt/lists' after 'apt-get install|update' : RUN /bin/sh -c apt update && apt install -y curl sudo # buildkit
+WARN - CIS-DI-0001: Create a user for the container
+ * Last user should not be root
+WARN - DKL-DI-0006: Avoid latest tag
+ * Avoid 'latest' tag
+INFO - CIS-DI-0005: Enable Content trust for Docker
+ * export DOCKER_CONTENT_TRUST=1 before docker pull/build
+INFO - CIS-DI-0006: Add HEALTHCHECK instruction to the container image
+ * not found HEALTHCHECK statement  
+```
 
 ---
 
@@ -67,19 +116,34 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock goodwithtech/dockle
 
 Checkov is a static code analysis tool for infrastructure security including Dockerfiles.
 
-### Install Checkov
+### Step 1: Install Checkov
+
+Using `brew`:
+
+```bash
+brew install checkov
+```
+
+Or directly with pip:
 
 ```bash
 pip install checkov
 ```
 
-### Run Checkov against a Dockerfile:
+### Step 2: Run Checkov against a Dockerfile
 
 ```bash
 checkov -f Dockerfile
 ```
 
 ✅ Identifies misconfigurations based on best practices and compliance checks.
+
+```bash
+dockerfile scan results:
+
+Passed checks: 2, Failed checks: 5, Skipped checks: 0
+<...>
+```
 
 ---
 
