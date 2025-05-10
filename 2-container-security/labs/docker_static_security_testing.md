@@ -9,7 +9,7 @@ Learn to perform static analysis on Dockerfiles to identify security issues befo
 ## 🧰 Prerequisites
 
 - Dockerfile available for testing
-- Tools: `hadolint`, `dockle`, `trivy`, `checkov`
+- Tools: `hadolint`, `dockle`, `checkov`
 - A system with Docker and internet access
 
 ---
