@@ -14,11 +14,11 @@ Learn how insecure Docker configurations can lead to container escapes and host 
 - A Linux VM (never your main host!)
 - Docker installed
 - Root access
-- Tools: `gcc`, `make`, `procps`, `util-linux`
+- Tools: `procps`, `util-linux`
 
 ```bash
 sudo apt update
-sudo apt install gcc make procps util-linux -y
+sudo apt install procps util-linux -y
 ```
 
 ---
@@ -64,29 +64,7 @@ nsenter --target 1 --mount --uts --ipc --net --pid
 
 ---
 
-## 🔹 Lab 3: Simulated Kernel Escape via `CAP_SYS_ADMIN`
-
-> This does **not** run a real exploit, but shows how dangerous capabilities can be.
-
-### Step 1: Launch container with high privileges
-
-```bash
-docker run -it --rm --cap-add=SYS_ADMIN ubuntu bash
-```
-
-### Step 2: Try sensitive operations
-
-```bash
-mount -t proc proc /mnt
-```
-
-✅ **Expected:** You have low-level kernel control.
-
-🧠 **Defense:** Drop all unnecessary capabilities.
-
----
-
-## 🔹 Lab 4: Escape via Host Devices
+## 🔹 Lab 3: Escape via Host Devices
 
 ### Step 1: Run container with device access
 
@@ -102,6 +80,13 @@ echo "MESSAGE FROM CONTAINER" > /dev/kmsg
 
 ✅ **Expected:** Writes to host kernel logs.
 
+After exiting the container check kernel logs with `sudo dmesg`.  
+You should see an entry like this:
+
+```bash
+[281931.449363] MESSAGE FROM CONTAINER
+```
+
 🧠 **Defense:** Do not expose host devices unless absolutely needed.
 
 ---
@@ -109,14 +94,14 @@ echo "MESSAGE FROM CONTAINER" > /dev/kmsg
 ## ✅ Wrap-Up
 
 - **What you learned:**
-    - How misconfigurations can lead to escapes
-    - Common escape vectors: privileged mode, host mounts, capabilities
-    - Defense-in-depth: drop caps, limit mounts, audit configs
+  - How misconfigurations can lead to escapes
+  - Common escape vectors: privileged mode, host mounts, capabilities
+  - Defense-in-depth: drop caps, limit mounts, audit configs
 
 - **Best practices:**
-    - Never use `--privileged` unless critical
-    - Use security profiles (AppArmor, seccomp)
-    - Use namespaces and rootless containers
-    - Audit Dockerfiles and runtime flags
+  - Never use `--privileged` unless critical
+  - Use security profiles (AppArmor, seccomp)
+  - Use namespaces and rootless containers
+  - Audit Dockerfiles and runtime flags
 
 ---
