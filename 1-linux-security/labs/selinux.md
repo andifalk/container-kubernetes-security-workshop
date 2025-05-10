@@ -1,6 +1,7 @@
 # 🧪 Understanding SELinux
 
 ## 🎯 Objective
+
 Learn how SELinux works, how to manage policies, and how to troubleshoot denials using native Linux systems.
 
 ---
@@ -18,7 +19,8 @@ sestatus
 ```
 
 ✅ **Expected Output:**
-```
+
+```bash
 SELinux status:                 enabled
 Current mode:                   enforcing
 ```

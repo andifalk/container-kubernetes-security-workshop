@@ -1,6 +1,7 @@
 # 🧪 Lab Series: System Logging on Linux (Ubuntu)
 
 ## 🎯 Objective
+
 Learn to manage and understand system logs using native Linux tools like `rsyslog`, `journald`, and `logrotate`.
 
 ---
@@ -15,6 +16,7 @@ Learn to manage and understand system logs using native Linux tools like `rsyslo
 ## 🔹 Lab 1: Understanding the Logging Stack
 
 Ubuntu uses:
+
 - `journald` (systemd journal) for structured logging
 - `rsyslog` for traditional syslog compatibility
 - `logrotate` for rotating log files

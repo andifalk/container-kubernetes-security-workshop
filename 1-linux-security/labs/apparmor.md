@@ -1,6 +1,7 @@
 # 🧪 Understanding AppArmor
 
 ## 🎯 Objective
+
 Learn how AppArmor profiles work, how to inspect and apply them, and how to debug blocked actions on a real Linux system.
 
 ---
@@ -25,7 +26,8 @@ sudo aa-status
 ```
 
 ✅ **Expected Output:**
-```
+
+```bash
 apparmor module is loaded.
 <...>
 profiles are in enforce mode.
@@ -45,13 +47,13 @@ sudo aa-status
 
 ## 🔹 Lab 2: Put an Application in Complain Mode
 
-### 2.1 Switch a known app to complain mode
+### Step 1: Switch a known app to complain mode
 
 ```bash
 sudo aa-complain /bin/ping
 ```
 
-### 2.2 Run the app and view logs
+### Step 2: Run the app and view logs
 
 ```bash
 ping -c 1 8.8.8.8
@@ -64,13 +66,13 @@ sudo journalctl | grep apparmor
 
 ## 🔹 Lab 3: Enforce a Profile and Trigger a Denial
 
-### 3.1 Switch to enforce mode
+### Step 1: Switch to enforce mode
 
 ```bash
 sudo aa-enforce /bin/ping
 ```
 
-### 3.2 Trigger restricted behavior
+### Step 2: Trigger restricted behavior
 
 ```bash
 ping -c 1 8.8.8.8 > /tmp/pinglog.txt
@@ -82,20 +84,20 @@ ping -c 1 8.8.8.8 > /tmp/pinglog.txt
 
 ## 🔹 Lab 4: Write and Load a Custom Profile
 
-### 4.1 Create a test script
+### Step 1: Create a test script
 
 ```bash
 echo -e '#!/bin/bash\ncat /etc/shadow' > ~/readshadow.sh
 chmod +x ~/readshadow.sh
 ```
 
-### 4.2 Run it once (it should succeed with `sudo`)
+### Step 2: Run it once (it should succeed with `sudo`)
 
 ```bash
 ~/readshadow.sh
 ```
 
-### 4.3 Generate a new profile
+### Step 3: Generate a new profile
 
 ```bash
 sudo aa-genprof ~/readshadow.sh

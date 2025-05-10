@@ -1,6 +1,7 @@
 # 🧪 Seccomp and System Call Filtering
 
 ## 🎯 Objective
+
 Understand how seccomp filters syscalls using profiles and explore how processes can be restricted from making unsafe system calls.
 
 ---

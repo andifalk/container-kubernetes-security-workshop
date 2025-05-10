@@ -1,6 +1,7 @@
 # 🧪 Lab Series: System Monitoring on Linux (Ubuntu)
 
 ## 🎯 Objective
+
 Learn how to monitor a Linux system’s performance and resource usage using built-in and common open-source tools.
 
 ---
