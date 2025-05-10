@@ -7,9 +7,8 @@
   * [🐧 Linux Namespaces Labs](1-linux-security/labs/linux-namespaces.md)
   * [🐧 Linux Capabilities Labs](1-linux-security/labs/linux-capabilities.md)
   * [🚧 Linux Control Groups (cgroups) Labs](1-linux-security/labs/linux-cgroups.md)
-  * Test
 * Advanced
-  * [Linux AppArmor Labs](1-linux-security/labs/apparmor.md)
+  * [🚧 Linux AppArmor Labs1](1-linux-security/labs/apparmor.md)
   * [🚧 Linux SELinux Labs](1-linux-security/labs/selinux.md)
   * [🚧 Linux Seccomp Labs](1-linux-security/labs/seccomp.md)
 * Logging and Monitoring
