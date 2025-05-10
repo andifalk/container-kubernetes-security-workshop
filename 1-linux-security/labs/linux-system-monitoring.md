@@ -11,7 +11,7 @@ Learn how to monitor a Linux system’s performance and resource usage using bui
 - Ubuntu 20.04+ system (VM or physical)
 - `sudo` access
 
-### Install essential tools:
+### Install essential tools
 
 ```bash
 sudo apt update
@@ -55,7 +55,7 @@ df -h
 ✅ View disk usage by filesystem.
 
 ```bash
-du -sh /var/*
+sudo du -sh /var/*
 ```
 
 ✅ See which directories are using the most space.
@@ -71,7 +71,7 @@ netstat -tulnp
 ✅ Shows listening ports and the associated processes.
 
 ```bash
-ss -tuln
+ss -tulnp
 ```
 
 ✅ Modern, faster alternative to `netstat`.
@@ -85,6 +85,11 @@ uptime
 ```
 
 ✅ Displays system load averages.
+
+```bash
+sar --help
+Usage: sar [ options ] [ <interval> [ <count> ] ]
+```
 
 ```bash
 sar -u 1 3

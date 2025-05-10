@@ -25,19 +25,19 @@ Ubuntu uses:
 
 ## 🔹 Lab 2: View Logs with `journalctl`
 
-### View the entire system log:
+### Step 1: View the entire system log
 
 ```bash
 journalctl
 ```
 
-### View logs for a specific service:
+### Step 2: View logs for a specific service
 
 ```bash
 journalctl -u ssh
 ```
 
-### Follow logs in real-time:
+### Step 3: Follow logs in real-time
 
 ```bash
 journalctl -f
@@ -51,7 +51,7 @@ journalctl -f
 
 By default, journald logs may be in memory only.
 
-### Make logs persistent:
+### Make logs persistent
 
 ```bash
 sudo mkdir -p /var/log/journal
@@ -119,7 +119,7 @@ sudo logrotate -f /etc/logrotate.conf
 
 ## 🔹 Lab 7: Secure Your Logs
 
-### Ensure correct permissions:
+### Ensure correct permissions
 
 ```bash
 sudo chmod -R go-rwx /var/log/*
