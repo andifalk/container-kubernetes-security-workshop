@@ -1,5 +1,7 @@
 # 🧪 Understanding AppArmor
 
+🚧 Under Construction!!
+
 ## 🎯 Objective
 
 Learn how AppArmor profiles work, how to inspect and apply them, and how to debug blocked actions on a real Linux system.
@@ -29,8 +31,9 @@ sudo aa-status
 
 ```bash
 apparmor module is loaded.
+171 profiles are loaded.
+76 profiles are in enforce mode.
 <...>
-profiles are in enforce mode.
 ```
 
 ---
