@@ -16,25 +16,25 @@ Learn to manage Linux file permissions, understand setuid/setgid, and recognize 
 
 In Linux, everything is a file, like:
 
-* Binary application code
-* Data
-* Configuration
-* Logs
-* Devices
+- Binary application code
+- Data
+- Configuration
+- Logs
+- Devices
 
 Permissions on such files determine which users are allowed to access those files and what actions they can perform on the files.
 
 Each file and directory has three user-based permission groups:
 
-* __u__ - owner – The _Owner_ permissions apply only to the owner of the file or directory, they will not impact the actions of other users.
-* __g__ - group – The _Group_ permissions apply only to the group that has been assigned to the file or directory, they will not affect the actions of other users.
-* __a__ - all users – The _All Users_ permissions apply to all other users on the system, this is the permission group that you want to watch the most.
+- __u__ - owner – The _Owner_ permissions apply only to the owner of the file or directory, they will not impact the actions of other users.
+- __g__ - group – The _Group_ permissions apply only to the group that has been assigned to the file or directory, they will not affect the actions of other users.
+- __a__ - all users – The _All Users_ permissions apply to all other users on the system, this is the permission group that you want to watch the most.
 
 The Permission Types that are used are:
 
-* __r__ – Read
-* __w__ – Write
-* __x__ – Execute
+- __r__ – Read
+- __w__ – Write
+- __x__ – Execute
 
 The permissions are displayed as: `-rwxrwxrwx 1 owner:group`.
 Using `ls -l test.txt` would result in the following:
