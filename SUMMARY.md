@@ -1,19 +1,19 @@
 # Container and Kubernetes Security Workshop
 
-## Linux Security Basics for Containers
+## 🐧 Linux Security Basics for Containers
 
 * Basics
-  * [Linux File Permissions Labs](1-linux-security/labs/linux-file-permissions.md)
-  * [Linux Namespaces Labs](1-linux-security/labs/linux-namespaces.md)
-  * [Linux Capabilities Labs](1-linux-security/labs/linux-capabilities.md)
+  * [🐧 Linux File Permissions Labs](1-linux-security/labs/linux-file-permissions.md)
+  * [🐧 Linux Namespaces Labs](1-linux-security/labs/linux-namespaces.md)
+  * [🐧 Linux Capabilities Labs](1-linux-security/labs/linux-capabilities.md)
   * [🚧 Linux Control Groups (cgroups) Labs](1-linux-security/labs/linux-cgroups.md)
 * Advanced
-  * [Linux AppArmor Labs](1-linux-security/labs/apparmor.md)
+  * [🐧 Linux AppArmor Labs](1-linux-security/labs/apparmor.md)
   * [🚧 Linux SELinux Labs](1-linux-security/labs/selinux.md)
   * [🚧 Linux Seccomp Labs](1-linux-security/labs/seccomp.md)
 * Logging and Monitoring
-  * [Linux System Logging Labs](1-linux-security/labs/linux-system-logging.md)
-  * [Linux System Monitoring Labs](1-linux-security/labs/linux-system-monitoring.md)
+  * [🐧 Linux System Logging Labs](1-linux-security/labs/linux-system-logging.md)
+  * [🐧 Linux System Monitoring Labs](1-linux-security/labs/linux-system-monitoring.md)
 
 ## Container Security
 
