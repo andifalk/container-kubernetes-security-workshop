@@ -54,7 +54,7 @@ Open another terminal and try to access the provided APIs of this application:
 http localhost:8080/api/hello
 ```
 
-You can find all provided endpoints documented here: https://github.com/andifalk/kubernetes-sample-app?tab=readme-ov-file#api-endpoints
+You can find all provided endpoints documented here: [API Endpoints](https://github.com/andifalk/kubernetes-sample-app?tab=readme-ov-file#api-endpoints)
 
 ### Step 3: Stop the Spring Boot App
 
