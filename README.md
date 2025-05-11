@@ -33,6 +33,7 @@ A practical Hands-On Workshop for Linux, Container and Kubernetes Security.
 ### Basics
 
 - [Basic Container Security Labs](2-container-security/labs/basic-secure-container-usage.md)
+- [🐳 Build Container Container Image Labs](2-container-security/labs/build-container-images.md)
 
 ### Advanced
 

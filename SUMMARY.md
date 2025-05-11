@@ -19,6 +19,7 @@
 
 * Basics
   * [🐳 Basic Container Security Labs](2-container-security/labs/basic-secure-container-usage.md)
+  * [🐳 Build Container Container Image Labs](2-container-security/labs/build-container-images.md)
 * Advanced
   * [🐳 Docker Linux Capabilities Labs](2-container-security/labs/docker_linux_capabilities.md)
   * [🐳 Container Image Scanning Labs](2-container-security/labs/container_image_scanning.md)

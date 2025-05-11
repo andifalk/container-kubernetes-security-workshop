@@ -1,6 +1,7 @@
 # 🧪 Secure Use of Containers in Kubernetes
 
 ## 🎯 Objective
+
 Learn to secure containers in Kubernetes using `securityContext`, Pod Security Admission, and runtime profiles (seccomp, AppArmor).
 
 ---
