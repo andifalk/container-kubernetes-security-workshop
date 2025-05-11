@@ -74,7 +74,7 @@ kubectl exec -it $(kubectl get pods --selector=app=nginx -o name) -- bash
 
 ---
 
-### 3.4: Make a Network Connection from Pod
+### Step 4: Make a Network Connection from Pod
 
 Inside the pod:
 
@@ -84,10 +84,6 @@ wget http://example.com
 ```
 
 ✅ Expected: Falco alerts on wget.
-
----
-
-✅ Expected: Falco detects privileged container creation.
 
 ---
 
@@ -103,10 +99,10 @@ kubectl logs -l app.kubernetes.io/name=falco -n falco -c falco
 
 ---
 
-## 🔹 Lab 6: Clean Up
+## 🔹 Lab 5: Clean Up
 
 ```bash
-kubectl delete pod attacker privcontainer
+kubectl delete deployment nginx
 helm uninstall falco
 ```
 
