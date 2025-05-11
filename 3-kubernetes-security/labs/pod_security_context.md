@@ -1,6 +1,7 @@
-# 🧪 Lab Series: Securing Workloads with Pod Security Context in Kubernetes
+# 🧪 Securing Workloads with Pod Security Context in Kubernetes
 
 ## 🎯 Objective
+
 Learn to secure Kubernetes workloads using `securityContext` and `podSecurityContext` for least-privilege container execution.
 
 ---

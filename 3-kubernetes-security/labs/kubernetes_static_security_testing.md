@@ -1,6 +1,7 @@
 # 🧪 Lab Series: Static Security Testing for Kubernetes Workloads
 
 ## 🎯 Objective
+
 Use tools like `kube-score`, `kubescape`, and `checkov` to statically analyze Kubernetes manifests for security and compliance issues.
 
 ---

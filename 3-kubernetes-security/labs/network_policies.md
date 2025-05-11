@@ -1,6 +1,7 @@
 # 🧪 Using Network Policies in Kubernetes
 
 ## 🎯 Objective
+
 Learn how to secure pod-to-pod communication using Kubernetes Network Policies.
 
 ---

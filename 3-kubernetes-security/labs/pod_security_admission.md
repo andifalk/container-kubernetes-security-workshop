@@ -1,6 +1,7 @@
 # 🧪 Using Pod Security Admission (PSA) and Security Levels in Kubernetes
 
 ## 🎯 Objective
+
 Learn how to enforce security standards for Kubernetes workloads using Pod Security Admission (PSA) and Pod Security Standards.
 
 ---
@@ -71,7 +72,7 @@ kubectl apply -f privileged-pod.yaml -n privileged-ns
 
 ✅ Works in `privileged-ns`.
 
-### Try in baseline namespace:
+### Try in baseline namespace
 
 ```bash
 kubectl apply -f privileged-pod.yaml -n baseline-ns
