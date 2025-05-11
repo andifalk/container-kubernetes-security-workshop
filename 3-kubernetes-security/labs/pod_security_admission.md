@@ -10,7 +10,7 @@ Learn how to enforce security standards for Kubernetes workloads using Pod Secur
 
 - Kubernetes 1.25+ cluster (PSA enabled by default)
 - `kubectl` configured
-- Cluster-admin privileges
+- Privileges to set labels on user's namespace
 
 ---
 
@@ -23,6 +23,16 @@ Kubernetes defines three levels:
 - **Restricted**: Heavily restricted, enforcing best practices
 
 ✅ PSA enforces these levels per namespace.
+
+### Step 1: Check your current namespace for next labs
+
+To get the name of your current namespace perform the following command and copy your namespace from there:
+
+```bash
+export MY_NS=$(kubectl config view --minify -o jsonpath={..namespace})
+```
+
+We will use this environment variable in the next labs.
 
 ---
 
@@ -50,7 +60,19 @@ kubectl label namespace restricted-ns   pod-security.kubernetes.io/enforce=restr
 
 ## 🔹 Lab 3: Deploy a Privileged Pod
 
-### Try in privileged namespace:
+### Step 1: Try with privileged policy
+
+First, label the current namespace as `privileged`:
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce=privileged
+```
+
+You may check that the label has been added correctly using:
+
+```bash
+kubectl get ns $MY_NS --show-labels
+```
 
 ```yaml
 # privileged-pod.yaml
@@ -67,18 +89,58 @@ spec:
 ```
 
 ```bash
-kubectl apply -f privileged-pod.yaml -n privileged-ns
+kubectl apply -f privileged-pod.yaml
 ```
 
 ✅ Works in `privileged-ns`.
 
-### Try in baseline namespace
+#### Cleanup
+
+Delete the pod for clean up:
 
 ```bash
-kubectl apply -f privileged-pod.yaml -n baseline-ns
+kubectl delete pod privileged-pod --force=true
 ```
 
-❌ Expected: Rejected by PSA.
+Also delete the label on the namespace:
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce-
+```
+
+### Step 2: Try with baseline policy
+
+First, label namespace with `baseline` policy
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce=baseline
+```
+
+You may check that the label has been added correctly using:
+
+```bash
+kubectl get ns $MY_NS --show-labels
+```
+
+```bash
+kubectl apply -f privileged-pod.yaml
+```
+
+❌ Expected: Rejected by PSA (`baseline` policy does not allow privileged containers).
+
+#### Cleanup
+
+Delete the pod for clean up:
+
+```bash
+kubectl delete pod privileged-pod --force=true
+```
+
+Also delete the label on the namespace:
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce-
+```
 
 ---
 
@@ -98,56 +160,176 @@ spec:
       allowPrivilegeEscalation: false
 ```
 
-Apply:
+### Step 1: Try with baseline policy
+
+First, label namespace with `baseline` policy
 
 ```bash
-kubectl apply -f baseline-pod.yaml -n baseline-ns
-kubectl apply -f baseline-pod.yaml -n restricted-ns
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce=baseline
 ```
 
-✅ Should work in both `baseline` and `restricted` namespaces.
+You may check that the label has been added correctly using:
+
+```bash
+kubectl get ns $MY_NS --show-labels
+```
+
+```bash
+kubectl apply -f baseline-pod.yaml
+```
+
+✅ Works with `baseline` policy.
+
+#### Cleanup
+
+Delete the pod for clean up:
+
+```bash
+kubectl delete pod baseline-pod --force=true
+```
+
+Also delete the label on the namespace:
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce-
+```
+
+### Step 2: Try with restricted policy
+
+First, label namespace with `restricted` policy
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce=restricted
+```
+
+You may check that the label has been added correctly using:
+
+```bash
+kubectl get ns $MY_NS --show-labels
+```
+
+```bash
+kubectl apply -f baseline-pod.yaml
+```
+
+❌ Expected: Rejected by PSA (`restricted` policy requires more secure context).
+
+#### Cleanup
+
+Delete the pod for clean up:
+
+```bash
+kubectl delete pod baseline-pod --force=true
+```
+
+Also delete the label on the namespace:
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce-
+```
 
 ---
 
-## 🔹 Lab 5: Deploy a Non-Compliant Pod in Restricted Namespace
+## 🔹 Lab 5: Deploy a Restricted-Compliant Pod
 
 ```yaml
-# noncompliant-pod.yaml
+# restricted-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
-  name: noncompliant-pod
+  name: restricted-pod
 spec:
+  securityContext:
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
   containers:
   - name: nginx
-    image: nginx
+    image: nginxinc/nginx-unprivileged
+    securityContext:
+      capabilities:
+            drop:
+              - ALL
+      allowPrivilegeEscalation: false
 ```
 
-Apply:
+### Step 1: Try with baseline policy
+
+First, label namespace with `baseline` policy
 
 ```bash
-kubectl apply -f noncompliant-pod.yaml -n restricted-ns
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce=baseline
 ```
 
-❌ Should be **rejected** because required securityContext fields are missing.
+You may check that the label has been added correctly using:
+
+```bash
+kubectl get ns $MY_NS --show-labels
+```
+
+```bash
+kubectl apply -f restricted-pod.yaml
+```
+
+✅ Still works with `baseline` policy.
+
+#### Cleanup
+
+Delete the pod for clean up:
+
+```bash
+kubectl delete pod restricted-pod --force=true
+```
+
+Also delete the label on the namespace:
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce-
+```
+
+### Step 2: Try with restricted policy
+
+First, label namespace with `restricted` policy
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce=restricted
+```
+
+You may check that the label has been added correctly using:
+
+```bash
+kubectl get ns $MY_NS --show-labels
+```
+
+```bash
+kubectl apply -f restricted-pod.yaml
+```
+
+✅ Now works as well with `restricted` policy.
+
+#### Cleanup
+
+Delete the pod for clean up:
+
+```bash
+kubectl delete pod restricted-pod --force=true
+```
+
+Also delete the label on the namespace:
+
+```bash
+kubectl label ns $MY_NS pod-security.kubernetes.io/enforce-
+```
 
 ---
 
 ## 🔹 Lab 6: View PodSecurity Violations
 
 ```bash
-kubectl describe ns restricted-ns
+kubectl describe ns $MY_NS
 ```
 
 ✅ Shows any PSA violations for that namespace.
-
----
-
-## 🔹 Lab 7: Clean Up
-
-```bash
-kubectl delete ns privileged-ns baseline-ns restricted-ns
-```
 
 ---
 

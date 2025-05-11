@@ -12,11 +12,19 @@ Learn how to secure pod-to-pod communication using Kubernetes Network Policies.
 - `kubectl` configured
 - A CNI that supports NetworkPolicies (e.g., Calico, Cilium, or Weave)
 
+### Test for a suitable CNI
+
+```bash
+kubectl get pods -n kube-system -o wide | grep -E 'calico|cilium|weave|flannel'
+```
+
+Note: The Kubernetes inside Docker Desktop does not enforce Network Policies! 
+
 ---
 
-## 🔹 Lab 1: Set Up Test Environment in Default Namespace
+## 🔹 Lab 1: Set Up Test Environment in Current Namespace
 
-### Create two deployments
+### Step 1: Create two deployments
 
 ```bash
 kubectl run client --image=busybox --command -- sleep 3600
@@ -25,12 +33,20 @@ kubectl run nginx --image=nginx
 
 ✅ Two pods: `client` and `nginx`.
 
+### Step 2: Expose nginx as a service
+
+```bash
+kubectl expose pod nginx --port=80 --name=nginx-service
+```
+
+✅ Service: `nginx-service`.
+
 ---
 
 ## 🔹 Lab 2: Verify Open Communication
 
 ```bash
-kubectl exec client -- wget --timeout=5 nginx
+kubectl exec client -- wget --timeout=5 -qO- http://nginx-service
 ```
 
 ✅ Should return the nginx default HTML page.
@@ -55,7 +71,7 @@ spec:
 kubectl apply -f default-deny.yaml
 ```
 
-✅ All ingress traffic is now blocked in the default namespace.
+✅ All ingress traffic is now blocked in the current namespace.
 
 ---
 
@@ -89,7 +105,7 @@ kubectl apply -f allow-client.yaml
 ## 🔹 Lab 5: Test Access Again
 
 ```bash
-kubectl exec client -- wget --timeout=5 nginx
+kubectl exec client -- wget --timeout=5 -qO- http://nginx-service
 ```
 
 ✅ Should work.
@@ -98,7 +114,7 @@ Test from another pod:
 
 ```bash
 kubectl run tester --image=busybox --command -- sleep 3600
-kubectl exec tester -- wget --timeout=5 nginx
+kubectl exec client -- wget --timeout=5 -qO- http://nginx-service
 ```
 
 ❌ Should fail due to policy.

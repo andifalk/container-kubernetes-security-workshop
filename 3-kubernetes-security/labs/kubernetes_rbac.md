@@ -1,5 +1,7 @@
 # 🧪 Using RBAC in Kubernetes
 
+🚧 Under Construction!! Does not work with training environment due to role restrictions in the user's namespace.
+
 ## 🎯 Objective
 
 Learn how to create and manage Kubernetes RBAC (Role-Based Access Control) rules using `Roles`, `ClusterRoles`, `RoleBindings`, and `ClusterRoleBindings`.
