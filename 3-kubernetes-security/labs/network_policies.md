@@ -1,5 +1,7 @@
 # 🧪 Using Network Policies in Kubernetes
 
+🚧 Under Construction!! Does not work with training environment due to missing CNI support.
+
 ## 🎯 Objective
 
 Learn how to secure pod-to-pod communication using Kubernetes Network Policies.
