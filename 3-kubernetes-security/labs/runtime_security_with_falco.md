@@ -8,7 +8,7 @@ Deploy and use Falco to detect suspicious activity and runtime security events i
 
 ## 🧰 Prerequisites
 
-- Kubernetes cluster (Minikube, kind, etc.)
+- Kubernetes cluster
 - `kubectl` configured
 - Helm installed
 
@@ -26,7 +26,7 @@ helm repo update
 Install Falco:
 
 ```bash
-helm install falco falcosecurity/falco
+helm install --replace falco --namespace falco --create-namespace --set tty=true falcosecurity/falco
 ```
 
 ✅ Falco daemonset is deployed to monitor syscalls on all cluster nodes.
@@ -46,33 +46,28 @@ kubectl logs -n falco -l app=falco
 
 ## 🔹 Lab 3: Trigger Suspicious Activities
 
-### 3.1: Create a Pod to Simulate an Attacker
+### Step 1: Create a Pod to Simulate an Attacker
 
 ```bash
-kubectl run attacker --image=busybox --command -- sleep 3600
-kubectl exec attacker -- sh
+kubectl create deployment nginx --image=nginx
 ```
 
 ---
 
-### 3.2: Touch a Sensitive File
-
-Inside the pod:
+### Step 2: Touch a Sensitive File
 
 ```bash
-touch /etc/passwd
+kubectl exec -it $(kubectl get pods --selector=app=nginx -o name) -- cat /etc/shadow
 ```
 
 ✅ Expected: Falco alerts on sensitive file access.
 
 ---
 
-### 3.3: Start a Shell Inside a Container (Unexpected Shell)
-
-Inside the pod:
+### Step 3: Start a Shell Inside a Container (Unexpected Shell)
 
 ```bash
-sh
+kubectl exec -it $(kubectl get pods --selector=app=nginx -o name) -- bash
 ```
 
 ✅ Expected: Falco may alert on a shell being spawned in a container.
@@ -84,33 +79,13 @@ sh
 Inside the pod:
 
 ```bash
+apt install wget
 wget http://example.com
 ```
 
-✅ Expected: Falco alerts on outbound network traffic if rules are configured.
+✅ Expected: Falco alerts on wget.
 
 ---
-
-### 3.5: Spawn a Privileged Container (Cluster-wide)
-
-```bash
-kubectl run privcontainer --image=busybox --overrides='
-{
-  "apiVersion": "v1",
-  "spec": {
-    "containers": [
-      {
-        "name": "busybox",
-        "image": "busybox",
-        "securityContext": {
-          "privileged": true
-        },
-        "command": ["sleep", "3600"]
-      }
-    ]
-  }
-}' --restart=Never
-```
 
 ✅ Expected: Falco detects privileged container creation.
 
@@ -121,22 +96,10 @@ kubectl run privcontainer --image=busybox --overrides='
 Check Falco logs:
 
 ```bash
-kubectl logs -n falco -l app=falco
+kubectl logs -l app.kubernetes.io/name=falco -n falco -c falco
 ```
 
-✅ You should see alerts for file access, shell execution, network activity, and privileged containers.
-
----
-
-## 🔹 Lab 5: Customize Falco Rules (Optional)
-
-Get Falco rules config:
-
-```bash
-kubectl get configmap falco-rules -n falco -o yaml
-```
-
-Edit or add new custom detection rules for your environment.
+✅ You should see alerts for file access, shell execution or network activity.
 
 ---
 
