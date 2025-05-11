@@ -1,13 +1,14 @@
 # 🧪 Using RBAC in Kubernetes
 
 ## 🎯 Objective
+
 Learn how to create and manage Kubernetes RBAC (Role-Based Access Control) rules using `Roles`, `ClusterRoles`, `RoleBindings`, and `ClusterRoleBindings`.
 
 ---
 
 ## 🧰 Prerequisites
 
-- Kubernetes cluster (Minikube, kind, GKE, etc.)
+- Kubernetes cluster
 - `kubectl` configured
 - Admin access to the cluster
 

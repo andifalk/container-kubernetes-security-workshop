@@ -20,6 +20,7 @@ Learn to secure containers in Kubernetes using `securityContext`, Pod Security A
 ### Step 1: Create the pod spec
 
 ```yaml
+# non-root-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -48,6 +49,7 @@ kubectl logs non-root-demo
 ## 🔹 Lab 2: Drop Linux Capabilities
 
 ```yaml
+# drop-caps-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -74,6 +76,7 @@ kubectl logs drop-caps
 ## 🔹 Lab 3: Use Read-Only Root Filesystem
 
 ```yaml
+# readonly-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -99,17 +102,21 @@ kubectl logs readonly-demo
 ## 🔹 Lab 4: Apply Seccomp and AppArmor (if supported)
 
 ```yaml
+# seccomp-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
   name: seccomp-demo
-  annotations:
-    seccomp.security.alpha.kubernetes.io/pod: runtime/default
 spec:
+  securityContext:
+    seccompProfile:
+      type: RuntimeDefault
   containers:
   - name: app
     image: busybox
     command: ["sh", "-c", "sleep 3600"]
+    securityContext:
+      allowPrivilegeEscalation: false
 ```
 
 ```bash
@@ -124,19 +131,34 @@ kubectl apply -f seccomp-pod.yaml
 
 ### Step 1: Create secure namespace
 
+Create a restricted policy in your own namespace.
+
+First get the name of your namespace:
+
 ```bash
-kubectl create ns secure-ns
-kubectl label ns secure-ns pod-security.kubernetes.io/enforce=restricted
+kubectl config get-contexts
+```
+
+If your namespace would be named `afa01-vm-0-ns` then this is the command for this (replace with your own namespace first)
+
+```bash
+kubectl label ns afa01-vm-0-ns pod-security.kubernetes.io/enforce=restricted
+```
+
+You may check that the label has been added correctly using:
+
+```bash
+kubectl get ns afa01-vm-0-ns --show-labels
 ```
 
 ### Step 2: Try applying an insecure pod
 
 ```yaml
+# insecure-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
   name: insecure
-  namespace: secure-ns
 spec:
   containers:
   - name: app
@@ -151,6 +173,20 @@ kubectl apply -f insecure-pod.yaml
 ```
 
 ❌ Expected: Pod creation denied by PSA.
+
+### Step 3: Clean up and remove label again
+
+To be able to create unrestricted pods again just remove the label
+
+```bash
+kubectl label ns afa01-vm-0-ns pod-security.kubernetes.io/enforce-
+```
+
+You may check that the label has been removed correctly using:
+
+```bash
+kubectl get ns afa01-vm-0-ns --show-labels
+```
 
 ---
 
