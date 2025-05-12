@@ -120,10 +120,100 @@ kubectl apply -f no-priv-escalation.yaml
 
 ---
 
-## 🔹 Lab 5: Clean Up
+## 🔹 Lab 5: A really Pod Security Context
+
+### Key Security Fields
+
+| Field                          | Default | Recommended     | Reason |
+|-------------------------------|---------|------------------|---------|
+| `automountServiceAccountToken`| `true`  | `false`          | Avoid exposing API token |
+| `hostNetwork`                 | `false` | `false`          | Prevent network namespace escape |
+| `hostPID`                     | `false` | `false`          | Prevent process visibility |
+| `hostIPC`                     | `false` | `false`          | Prevent shared memory abuse |
+| `readOnlyRootFilesystem`      | N/A     | `true`           | Block writes to `/` |
+| `seccompProfile`              | N/A     | `RuntimeDefault` | Prevent unwanted syscalls |
+
+✅ Even if some defaults are `false`, **you should set them explicitly** to:
+
+- Document intent
+- Satisfy policies (e.g., PodSecurityAdmission `restricted`)
+- Prevent accidental future changes
+
+### Step 1: Define a really Secure Pod Specification
+
+```yaml
+# secure-pod.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-pod
+spec:
+  automountServiceAccountToken: false
+  hostNetwork: false
+  hostPID: false
+  hostIPC: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    runAsGroup: 3000
+    fsGroup: 2000
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+  - name: secure-container
+    image: busybox
+    command: ["sh", "-c", "id && sleep 3600"]
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop: ["ALL"]
+```
+
+✅ This Pod enforces:
+
+- Disable token mounting as the application does not need to call the Kubernetes API
+- Ensures pod is not sharing the host network namespace
+- Prevents access to host process namespace
+- Prevents access to host IPC namespace
+- Non-root user (UID 1000)
+- Sets the group ID (GID 3000) for the primary group of the container process
+- No privilege escalation
+- No added capabilities
+- Read-only root filesystem
+- Ensures that the container has group access (GID 2000) to the mounted files
+- Seccomp isolation
+
+#### Step 2: Apply and Verify the Secure Pod
 
 ```bash
-kubectl delete pod non-root-pod readonly-pod drop-caps-pod no-priv-escalation
+kubectl apply -f secure-pod.yaml
+kubectl get pod secure-pod
+kubectl exec secure-pod -- id
+```
+
+✅ The output should show non-root UID/GID.
+
+#### Step 3: Test File System Protection
+
+Try writing to the root filesystem:
+
+```bash
+kubectl exec secure-pod -- touch /testfile
+```
+
+❌ Expected: Operation not permitted (due to readOnlyRootFilesystem)
+
+### ✅ Summary
+
+- ✅ Deployed the most secure possible Pod using native features
+- ✅ Blocked privilege escalation and system-level access
+- ✅ Followed all best practices explicitly for compliance and clarity
+
+## 🔹 Lab 6: Clean Up
+
+```bash
+kubectl delete pod non-root-pod readonly-pod drop-caps-pod no-priv-escalation pod secure-pod
 ```
 
 ---

@@ -1,6 +1,7 @@
 # 🧪 Enabling Encryption at Rest for Kubernetes Secrets
 
 ## 🎯 Objective
+
 Learn how to encrypt Kubernetes Secrets at rest in etcd using AES-CBC encryption.
 
 ---
@@ -14,6 +15,7 @@ Learn how to encrypt Kubernetes Secrets at rest in etcd using AES-CBC encryption
 ---
 
 ## ⚠️ Important
+
 Always backup your cluster before modifying critical configurations!
 
 ---

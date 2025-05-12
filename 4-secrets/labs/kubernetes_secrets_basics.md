@@ -1,13 +1,14 @@
 # 🧪 Secure Secrets Management in Kubernetes
 
 ## 🎯 Objective
+
 Learn how to manage secrets securely in Kubernetes using best practices, sealed secrets, and volume-based injection.
 
 ---
 
 ## 🧰 Prerequisites
 
-- Kubernetes cluster (Minikube, kind, GKE, etc.)
+- Kubernetes cluster
 - `kubectl` configured
 - Optional tools: `kubeseal`, `helm`, `vault`
 
