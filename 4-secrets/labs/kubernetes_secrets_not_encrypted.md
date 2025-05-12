@@ -1,13 +1,14 @@
-# 🧪 Lab Series: Demonstrating Kubernetes Secrets Are Base64 Encoded (Not Encrypted)
+# 🧪 Demonstrating Kubernetes Secrets Are Base64 Encoded (Not Encrypted)
 
 ## 🎯 Objective
+
 Show that Kubernetes Secrets are only base64-encoded by default and not securely encrypted at rest without additional configuration.
 
 ---
 
 ## 🧰 Prerequisites
 
-- Kubernetes cluster (Minikube, kind, etc.)
+- Kubernetes cluster
 - `kubectl` configured
 - Admin access to the cluster
 
@@ -68,7 +69,7 @@ echo "U3VwZXJTZWNyZXQxMjM=" | base64 --decode
 
 ⚠️ **Warning**: Direct access to etcd is needed for real inspection; we simulate this.
 
-### Simulate reading etcd storage:
+### Simulate reading etcd storage
 
 If you had direct etcd access (example from `/var/lib/etcd`), you'd see that the stored secrets are still base64-encoded.
 

@@ -1,6 +1,9 @@
 # 🧪 Using an external HashiCorp Vault Instance with Kubernetes
 
+🚧 Under Construction!!
+
 ## 🎯 Objective
+
 Use an existing, externally managed HashiCorp Vault instance to inject secrets securely into Kubernetes pods.
 
 ---
