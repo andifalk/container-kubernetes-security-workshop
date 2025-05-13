@@ -39,7 +39,7 @@ git clone https://github.com/andifalk/kubernetes-sample-app.git
 To build the Spring Boot App, change into the folder `kubernetes-sample-app` and then run:
 
 ```bash
-./mnvw clean package
+./mvnw clean package
 ```
 
 If the build finished successfully you can then run the application by:
