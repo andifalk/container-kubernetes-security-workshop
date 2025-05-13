@@ -36,29 +36,7 @@ We will use this environment variable in the next labs.
 
 ---
 
-## 🔹 Lab 2: Create Namespaces for Each Policy Level
-
-```bash
-kubectl create ns privileged-ns
-kubectl create ns baseline-ns
-kubectl create ns restricted-ns
-```
-
-Label namespaces:
-
-```bash
-kubectl label namespace privileged-ns   pod-security.kubernetes.io/enforce=privileged
-
-kubectl label namespace baseline-ns   pod-security.kubernetes.io/enforce=baseline
-
-kubectl label namespace restricted-ns   pod-security.kubernetes.io/enforce=restricted
-```
-
-✅ Labels control what pods are allowed.
-
----
-
-## 🔹 Lab 3: Deploy a Privileged Pod
+## 🔹 Lab 2: Deploy a Privileged Pod
 
 ### Step 1: Try with privileged policy
 
@@ -144,7 +122,7 @@ kubectl label ns $MY_NS pod-security.kubernetes.io/enforce-
 
 ---
 
-## 🔹 Lab 4: Deploy a Baseline-Compliant Pod
+## 🔹 Lab 3: Deploy a Baseline-Compliant Pod
 
 ```yaml
 # baseline-pod.yaml
@@ -230,7 +208,7 @@ kubectl label ns $MY_NS pod-security.kubernetes.io/enforce-
 
 ---
 
-## 🔹 Lab 5: Deploy a Restricted-Compliant Pod
+## 🔹 Lab 4: Deploy a Restricted-Compliant Pod
 
 ```yaml
 # restricted-pod.yaml
@@ -323,7 +301,7 @@ kubectl label ns $MY_NS pod-security.kubernetes.io/enforce-
 
 ---
 
-## 🔹 Lab 6: View PodSecurity Violations
+## 🔹 Lab 5: View PodSecurity Violations
 
 ```bash
 kubectl describe ns $MY_NS
